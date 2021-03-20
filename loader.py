@@ -5,7 +5,8 @@ class loader():
 
     # Loads every date 
     def loadAllDates(self):
-        with open("txt/zpsw.txt", "r") as fp:
+        with open("txt/testdata.txt", "r") as fp:
             for i in fp:
                 print()
         return 
+        
