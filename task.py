@@ -13,12 +13,12 @@ class Task():
     def __init__(self='hi', name='blank', due_date='1/1/2021'):
         self.name = name
         self.due_date = datetodatetime(due_date)
-        #self.work_days = []
-        #self.work_time = 0
+        self.work_days = []
+        self.work_time = 0
         self.is_complete = False
 
-    #def defineWorkdays(self):
-        #pass
+    def defineWorkdays(self, workdays: list):
+        self.work_days.extend(workdays)
 
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
@@ -39,3 +39,7 @@ def datetodatetime(date='1/1/2021'):
         print("Incorrect formatting in date. Setting as today")
         objectdate = dt.date.today()
     return objectdate
+
+    def whenToWork(due_date):
+        # only on edit screen, show days until due date, then uncheck the ones that you don't want
+        pass
