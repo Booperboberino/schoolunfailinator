@@ -1,5 +1,7 @@
 import datetime as dt
 
+# Classes
+
 class Task():
 
     '''
@@ -23,7 +25,7 @@ class Task():
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
 
-
+# Functions
 
 def datetodatetime(date='1/1/2021'):
     '''
