@@ -6,7 +6,7 @@ class Task():
 
     '''
     Input: name, due_date, topic
-    stores: name, due_date_time, workdays, topic
+    stores: name, due_date_time, topic
 
     defineWorkdays(): will be used to pick which days the user wants to work on the taks, and for how long
 
@@ -15,15 +15,17 @@ class Task():
     def __init__(self='hi', name='blank', due_date='1/1/2021'):
         self.name = name
         self.due_date = datetodatetime(due_date)
-        self.work_days = []
-        self.work_time = 0
         self.is_complete = False
-
-    def defineWorkdays(self, workdays: list):
-        self.work_days.extend(workdays)
 
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
+
+class WorkOnTask():
+    pass
+
+class TodaysTasks():
+
+    pass
 
 # Functions
 
@@ -42,6 +44,18 @@ def datetodatetime(date='1/1/2021'):
         objectdate = dt.date.today()
     return objectdate
 
-    def whenToWork(due_date):
-        # only on edit screen, show days until due date, then uncheck the ones that you don't want
-        pass
+def whenToWork(due_date):
+    # only on edit screen, show days until due date, then uncheck the ones that you don't want
+    pass
+
+def add_task():
+    pass
+
+def edit_task():
+    pass
+
+def remove_task():
+    pass
+
+def tasks_on_day():
+    pass
