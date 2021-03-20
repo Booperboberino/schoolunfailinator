@@ -13,6 +13,7 @@ class Task():
     '''
 
     def __init__(self='hi', name='blank', due_date='1/1/2021'):
+        #self.id = findUniqueId()
         self.name = name
         self.due_date = datetodatetime(due_date)
         self.is_complete = False
@@ -24,9 +25,17 @@ class Task():
         self.due_date = date
 
 class WorkOnTask():
-    pass
+     '''
+     Input: respective task, date to work on, time
+
+     '''
+
+    #def __init__(self):
+    #    pass
+
 
 class TodaysTasks():
+    #export list of each days task
     pass
 
 # Functions
@@ -37,15 +46,52 @@ def datetodatetime(date='1/1/2021'):
 
     Output: datetime date class 
     '''
-    split_date = date.split('/')
+    int_dates = []
     try:
-        objectdate = dt.date(int(split_date[2]),int(split_date[1]),int(split_date[0]))
+        for date in date.split('/'):
+            int_dates.append(int(date))
     except ValueError:
         # To prevent crashing on incorrect date being passed, if an error is raised when the date strings are converted to int, today will be passed instead
         print("Incorrect formatting in date. Setting as today")
         objectdate = dt.date.today()
+    else:
+        objectdate = dt.date(int_dates[2],int_dates[0],int_dates[1])
     return objectdate
 
-def whenToWork(due_date):
+def whenToWork(task):
     # only on edit screen, show days until due date, then uncheck the ones that you don't want
-    pass
+
+    #variables to make things easier
+    today = dt.date.today()
+    due_date = task.due_date
+    delta_date = due_date - today
+
+    # Creating a list of dates to chose from
+    potential_dates = []
+    for i in range(0, delta_date.days+1):
+        date = today + dt.timedelta(days=i)
+        potential_dates.append(date)
+        print(str(i) + ' ' + date.isoformat()) #CHANGE TO UI!!
+
+    #Having user select dates (please change to UI)
+    selected_dates = []
+    need_input = True
+    while need_input:
+        try:
+            new_number = input("Please select a number for a date above: (or type 'q' to finish)")
+            if int(new_number) > delta_date.days+1 or new_number != 'q':
+                raise EnvironmentError('Error not included')
+        except EnvironmentError:
+            print("You entered an invalid value, please try again.")
+        else:
+            if new_number == 'q':
+                break
+            else:
+                selected_dates.append(int(new_number))
+                
+    # finish up by creating a work on task object for each one per day
+
+
+my_task = Task('Hello', '4/21/2021')
+print(my_task)
+whenToWork(my_task)
