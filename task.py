@@ -27,9 +27,7 @@ class WorkOnTask():
     pass
 
 class TodaysTasks():
-
     pass
-
 
 # Functions
 
@@ -50,16 +48,4 @@ def datetodatetime(date='1/1/2021'):
 
 def whenToWork(due_date):
     # only on edit screen, show days until due date, then uncheck the ones that you don't want
-    pass
-
-def add_task():
-    pass
-
-def edit_task():
-    pass
-
-def remove_task():
-    pass
-
-def tasks_on_day():
     pass
