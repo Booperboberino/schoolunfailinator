@@ -1,15 +1,16 @@
 class TaskHandler():
-    def __init__():
+
+    # def __init__():
+    #     pass
+
+    def addTask():
         pass
 
-    def add_task():
+    def editTask():
         pass
 
-    def edit_task():
+    def removeTask():
         pass
 
-    def remove_task():
-        pass
-
-    def tasks_on_day():
+    def numberOfTasksOnDay():
         pass
