@@ -6,6 +6,7 @@ class Task():
 
     '''
     Input: name, due_date, topic
+
     stores: name, due_date_time, workdays, topic
 
     defineWorkdays(): will be used to pick which days the user wants to work on the taks, and for how long
@@ -24,6 +25,9 @@ class Task():
 
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
+
+    def setDay(self, date):
+        self.due_date = date
 
 # Functions
 
