@@ -1,6 +1,6 @@
 class TaskHandler():
     def __init__():
-    pass
+        pass
 
     def add_task():
         pass
