@@ -1,12 +1,4 @@
 import datetime
-def datetodatetime(date='1/1/2021'):
-    split_date = date.split('/')
-    try:
-        objectdate = datetime.date(int(split_date[2]),int(split_date[1]),int(split_date[0]))
-    except ValueError:
-        print("Incorrect formatting in date. Setting as today")
-        objectdate = datetime.date.today()
-    return objectdate
 
 class Task():
 
@@ -31,3 +23,19 @@ class Task():
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
 
+
+
+def datetodatetime(date='1/1/2021'):
+    '''
+    Input: raw date as string
+
+    Output: datetime date class 
+    '''
+    split_date = date.split('/')
+    try:
+        objectdate = datetime.date(int(split_date[2]),int(split_date[1]),int(split_date[0]))
+    except ValueError:
+        # To prevent crashing on incorrect date being passed, if an error is raised when the date strings are converted to int, today will be passed instead
+        print("Incorrect formatting in date. Setting as today")
+        objectdate = datetime.date.today()
+    return objectdate
