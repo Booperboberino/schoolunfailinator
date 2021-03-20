@@ -7,6 +7,13 @@ class loader():
     def loadAllDates(self):
         with open("txt/testdata.txt", "r") as fp:
             for i in fp:
-                print()
-        return 
-        
+                print(i)
+        return "a"
+
+
+with open("txt/testdata.txt", "r") as fp:
+    cnt = 0
+    for i in fp:
+        # do
+        ""
+
