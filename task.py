@@ -19,6 +19,9 @@ class Task():
 
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
+    
+    def setDay(self, date):
+        self.due_date = date
 
 class WorkOnTask():
     pass
@@ -26,6 +29,7 @@ class WorkOnTask():
 class TodaysTasks():
 
     pass
+
 
 # Functions
 
