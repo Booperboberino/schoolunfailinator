@@ -5,13 +5,13 @@ import taskHandler
 class Loader():
 
     def __init__(self):
-        self.filename=""
+        self.fileName=""
         pass
 
     def createDay(self,year,month,day): #creates blank day if not in .json and also creates year and month if necessary
         global fileName
         listyBoi = [str(year), str(month), str(day)]
-        f = open(fileName)
+        f = open(self.fileName)
         data = json.load(f)
         a = data
         for i in listyBoi:
@@ -19,20 +19,20 @@ class Loader():
                 a[i]={}
             a = a[i]
         f.close()
-        f = open(fileName,'w')
+        f = open(self.fileName,'w')
         json.dump(data,f,indent = 2)
         f.close()
     #I haven't tested some of this stuff in a while so no guarantee it all works
     def editToDo(self,year,month,day,task,done = False): #either changes or adds a value to the to do list
         global fileName
         self.createDay(year,month,day)
-        f = open(fileName)
+        f = open(self.fileName)
         data = json.load(f)
         f.close()
 
         if data[str(year)][str(month)][str(day)] == {}:
-            initDay(year,month,day)
-        dayInfo = getDayInfo(year,month,day)
+            self.initDay(year,month,day)
+        dayInfo = self.getDayInfo(year,month,day)
 
         if task in dayInfo["toDo"]: #code to change value and update completed and remaining, to be used with check box
             old = dayInfo["toDo"][task]
@@ -51,7 +51,7 @@ class Loader():
             else:
                 dayInfo["remaining"]+=1
         data[str(year)][str(month)][str(day)] = dayInfo
-        f = open(fileName,'w')
+        f = open(self.fileName,'w')
         json.dump(data,f,indent = 2)
         f.close()    
         
@@ -62,13 +62,13 @@ class Loader():
         global fileName
         self.createDay(year,month,day)
         
-        f = open(fileName)
+        f = open(self.fileName)
         data = json.load(f)
         f.close() 
         return data[str(year)][str(month)][str(day)]
 
     def getToDo(self,year,month,day): #kinda redundant since get day info, but it exists cause yeah
-        dayInfo = getDayInfo(year,month,day)
+        dayInfo = self.getDayInfo(year,month,day)
         if dayInfo == {}:
             return dayInfo
         return dayInfo["toDo"]
@@ -76,7 +76,7 @@ class Loader():
     def initDay(self,year,month,day): #initializes/resets a day
         global fileName
         self.createDay(year,month,day)
-        f = open(fileName)
+        f = open(self.fileName)
         data = json.load(f)
         initValues = {"completed":0,"remaining":0,"toDo":{}}
         data[str(year)][str(month)][str(day)] = initValues
@@ -87,8 +87,8 @@ class Loader():
 
     def removeDay(self,year,month,day): #removes a day and its month and/or year if made empty
         global fileName
-        self.createDay(self,year,month,day)
-        f = open(fileName)
+        self.createDay(year,month,day)
+        f = open(self.fileName)
         data = json.load(f)    
         del data[str(year)][str(month)][str(day)]
         if data[str(year)][str(month)] == {}:
@@ -96,17 +96,17 @@ class Loader():
         if data[str(year)]== {}:
             del data[str(year)]
         f.close()
-        f = open(fileName,'w')
+        f = open(self.fileName,'w')
         json.dump(data,f,indent = 2)
         f.close()
 
     def removeToDoItem(self,year,month,day,task): #removes an item from the to do list and updates the completed or remaining values
         global fileName
         self.createDay(year,month,day)
-        f = open(fileName)
+        f = open(self.fileName)
         data = json.load(f)
         f.close()
-        dayInfo = getDayInfo(year,month,day)
+        dayInfo = self.getDayInfo(year,month,day)
         if dayInfo == {} or "toDo" not in dayInfo:
             return
         elif task not in dayInfo["toDo"]:
@@ -117,7 +117,7 @@ class Loader():
             dayInfo["completed"] -=1
         del dayInfo["toDo"][task]
         data[str(year)][str(month)][str(day)] = dayInfo
-        f = open(fileName,'w')
+        f = open(self.fileName,'w')
         json.dump(data,f,indent = 2)
         f.close()  
         
@@ -130,9 +130,6 @@ class Loader():
     def jsonToTask(self,task, year="2020",month="03",day="21"):
         dueDate = month + "/" + day + "/" + year
         return Task(name=task, due_date=dueDate)
-
-    def __init__(self):
-        pass
 
     # Loads every date 
     def loadAllDates(self):
