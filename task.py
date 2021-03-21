@@ -12,11 +12,17 @@ class Task():
 
     '''
 
+
     def __init__(self, id: int, name: str, due_date: str):
-        #self.id = findUniqueId()
+        #self.id = taskHandler.findUniqueId()
+
         self.name = name
         self.due_date = datetodatetime(due_date)
         self.is_complete = False
+
+        # ended up putting workdays with the task becasue it didn't make much sense to have a separate object for them
+        self.work_days = []
+        self.work_time = 0
 
     def __str__(self):
         return self.name + ' is due on ' + str(self.due_date)
@@ -24,19 +30,29 @@ class Task():
     def setDay(self, date):
         self.due_date = date
 
-class WorkOnTask():
-     '''
-     Input: respective task, date to work on, time
+    def addWorkDays(self, date: list):
+        self.work_days.extend(date)
 
-     '''
-
-    #def __init__(self):
-    #    pass
+    def setWorkTime(self, time):
+        self.work_time = time
 
 
 class TodaysTasks():
-    #export list of each days task
-    pass
+    '''
+    input: a date, list of all tasks
+    stores: list of all tasks on that day
+    '''
+    
+    def __init__(self, date, tasks):
+        self.task_list = []
+        for task in tasks: # change to tasks.value for dictionary
+            if task.due_date == date:
+                self.task_list.append(task)
+            else:
+                for work_task_day in task.work_days:
+                    if work_task_day == date:
+                        self.task_list.append(task)
+    
 
 # Functions
 
@@ -58,7 +74,7 @@ def datetodatetime(date='1/1/2021'):
         objectdate = dt.date(int_dates[2],int_dates[0],int_dates[1])
     return objectdate
 
-def whenToWork(task):
+def daysToWork(task):
     # only on edit screen, show days until due date, then uncheck the ones that you don't want
 
     #variables to make things easier
@@ -73,25 +89,30 @@ def whenToWork(task):
         potential_dates.append(date)
         print(str(i) + ' ' + date.isoformat()) #CHANGE TO UI!!
 
-    #Having user select dates (please change to UI)
+    #Having user select dates (please change to GUI)
+    # Basically use the stuff from above to make a (pop up?) list where users can click a check mark from, then return a list full of the users check marks once they click submit
     selected_dates = []
     need_input = True
     while need_input:
         try:
-            new_number = input("Please select a number for a date above: (or type 'q' to finish)")
-            if int(new_number) > delta_date.days+1 or new_number != 'q':
+            new_number = input("Please select a number for a date above: (or type 'q' to finish): ")
+            int_number = int(new_number)
+            if int_number > delta_date.days+1:
                 raise EnvironmentError('Error not included')
         except EnvironmentError:
             print("You entered an invalid value, please try again.")
-        else:
+        except ValueError:
             if new_number == 'q':
                 break
             else:
-                selected_dates.append(int(new_number))
-                
-    # finish up by creating a work on task object for each one per day
+                print("ERROROROROROR")
+        else:
+            selected_dates.append(potential_dates[int(new_number)])
+            print(selected_dates)
 
+    # finish up by creating a work on task object for each one per day
+    task.addWorkDays(selected_dates)
 
 my_task = Task('Hello', '4/21/2021')
 print(my_task)
-whenToWork(my_task)
+daysToWork(my_task)
