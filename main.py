@@ -165,11 +165,12 @@ class calendarGrid:
                         remaining = str(temp["remaining"])
                     self.dayGrid[r].append(calendarDay(dayCounter, completed, remaining, self.calendar, r, c)) #The three is a placeholder.
                 dayCounter += 1
-                
+    
     def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
         for r in range(len(self.dayGrid)):
             for c in range(len(self.dayGrid[r])):
-                self.dayGrid[r][c].unClick()               
+                self.dayGrid[r][c].unClick()     
+
 #----------------------ADD / DEL ASSIGNMENT FUNCTIONS-----------
 
 def isValidDate(date):
@@ -189,22 +190,18 @@ def onAddEventClick():
     while not isValidDate(eventDate):
         eventDate = simpledialog.askstring("Input","When is the assignment due? [mm/dd/yyyy]",parent=root)
 
-    """
     try:
         taskHandler.addTask(eventName, eventDate)
+
+        #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
     except:
         pass
-    """
+    
     #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
 
 
 def onDelEventClick():
-    pass
-    #get information from user via popup: name, due date [MM/DD/YYYY]
-
-
-
-
+    eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
 
 
 def updateToDo(): #updates the todo list on the screen
@@ -255,7 +252,7 @@ calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
 addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = onAddEventClick)
 addAssignmentButton.grid(row = 2, column = 0)
 
-delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = lambda: print("goodbye world!"))
+delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = onDelEventClick)
 delAssignmentButton.grid(row = 2, column = 1)
 
 
