@@ -30,9 +30,9 @@ class listItem:
 
     #Takes parameters for the item name and the length of time in minutes, plus some other gui stuff. 
 
-    def __init__(self, itemname, timelength, parentWidget, r, c, checked = False):
+    def __init__(self, itemname, timelength_NOTUSINGTHIS, parentWidget, r, c, checked = False):
         self.itemname = itemname
-        self.itemString = itemname.capitalize() + " (" +str(timelength)+" Minutes)"
+        self.itemString = itemname.capitalize()
 
         self.bullet = Frame(parentWidget, padx= 20, pady = 5, bg = dark_color)
         self.bullet.grid(row = r, column = c)
@@ -87,7 +87,7 @@ class calendarDay:
         self.row = row
         self.column = col
         self.dayNum = dayNum
-        self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10)
+        self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10, bg = light_color)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
         
@@ -187,19 +187,19 @@ def onAddEventClick():
     #get information from user via popup: name, due date [MM/DD/YYYY]
     eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
     eventDate = "not a correct date"
-
     
     while not isValidDate(eventDate):
         eventDate = simpledialog.askstring("Input","When is the assignment due? [mm/dd/yyyy]",parent=root)
 
-    try:
-        taskHandler.addTask(eventName, eventDate)
 
-        #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
-    except:
-        pass
+    #taskHandler.addTask(eventName, eventDate)
+
+    eventDateArr = eventDate.split("/")
+    fileSystem.editToDo(eventDateArr[2], eventDateArr[0], eventDateArr[1], eventName)
+    print("no errors")
+
     
-    #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
+
 
 
 def onDelEventClick():
@@ -252,10 +252,10 @@ calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
 
 
 #These are the add/remove assignment buttons. Edit the "command" parameters with the appropriate function. If the function has its own parameters, use this... command = lambda: functionName(param)
-addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = onAddEventClick)
+addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = onAddEventClick, bg = light_color)
 addAssignmentButton.grid(row = 2, column = 0)
 
-delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = onDelEventClick)
+delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = onDelEventClick, bg = light_color)
 delAssignmentButton.grid(row = 2, column = 1)
 
 
