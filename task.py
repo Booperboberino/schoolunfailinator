@@ -12,7 +12,7 @@ class Task():
 
     '''
 
-    def __init__(self='hi', name='blank', due_date='1/1/2021'):
+    def __init__(self, id: int, name: str, due_date: str):
         #self.id = findUniqueId()
         self.name = name
         self.due_date = datetodatetime(due_date)
