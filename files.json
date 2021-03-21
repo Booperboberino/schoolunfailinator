@@ -2,11 +2,11 @@
   "2021": {
     "03": {
       "20": {
-        "completed": 2,
-        "remaining": 1,
+        "completed": 0,
+        "remaining": 3,
         "toDo": {
-          "Make Grilled Cheese": true,
-          "Eat Grilled Cheese": true,
+          "Make Grilled Cheese": false,
+          "Eat Grilled Cheese": false,
           "Throw Away Empty Butter Container": false
         }
       },

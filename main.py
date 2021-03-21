@@ -13,9 +13,10 @@ for i in selectedDate:
     jeff += 1
 #print(selectedDate)
 
+squareRow = 0
+squareColumn = 0
 dark_color = "midnight blue"
 light_color = "white"
-
 #---------------HELPER CLASSES---------------------------
 
 
@@ -43,6 +44,9 @@ class listItem:
         if checked: self.switchButton() #allows task to start completed (useful for getting one from memory)
         
     def switchButton(self): #switches button color and changes if a task is done or not
+        global calendarDemo
+        global squareRow
+        global squareColumn
         if self.buttonStatus == "white":
             self.checkbox.config(bg = "black")
             self.buttonStatus = "black"
@@ -52,6 +56,8 @@ class listItem:
             self.buttonStatus = "white"
             self.checked = False
         self.updateComplete()
+        calendarDemo.dayGrid[squareRow][squareColumn].updateTasksLeft()
+
         
     def __str__(self):
         return self.itemString
@@ -63,6 +69,7 @@ class listItem:
 
     def updateComplete(self): #changes boolean value of task in .json file to match check box
         global selectedDate
+        global update
         fileSystem.editToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"],self.itemname,self.checked)
 
 
@@ -74,16 +81,24 @@ class calendarDay:
     #This class contains the individual day buttons. Need to expand the onClick function to alter the todo list. These objects are automatically made by calenderGrid.
 
     def __init__(self, dayNum, tasksDone, tasksToDo, parentgrid, row, col):
+        self.parentgrid = parentgrid
+        self.row = row
+        self.column = col
         self.dayNum = dayNum
         self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
         
     def onClick(self):
+        global squareColumn
+        global squareRow
         global selectedDate
         global calendarDemo
+
         #switch from light to dark when pressed. 
         if not self.currentlyPressed:
+            squareColumn = self.column
+            squareRow = self.row
             calendarDemo.clearClicked()
             self.button.config(bg = "black", fg = "white")
             self.currentlyPressed = True
@@ -101,6 +116,13 @@ class calendarDay:
     def unClick(self): #unclicks a button
             self.button.config(bg = "white", fg = "black")
             self.currentlyPressed = False
+
+    def updateTasksLeft(self):
+        global selectedDate
+        data = fileSystem.getDayInfo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
+        if data != {}:
+            self.button['text'] = str(selectedDate["day"])+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"]) 
+
 
 class calendarGrid:
     
@@ -135,7 +157,6 @@ class calendarGrid:
                     alteredDays = ""
                     if dayCounter < 10: alteredDays = "0"
                     temp = fileSystem.getDayInfo(selectedDate["year"],selectedDate["month"],alteredDays+str(dayCounter))
-                    print(selectedDate["year"],selectedDate["month"],alteredDays+str(dayCounter))
                     if temp == {}:
                         completed = ""
                         remaining = ""
@@ -168,7 +189,7 @@ def updateToDo(): #updates the todo list on the screen
 
 #These lines create the window itself, and title it.
 root = tk.Tk()
-root.title("GUI prototype")
+root.title("Calendar")
 root.configure(bg = dark_color)
 
 #Creates two "frames," one for the to-do list and one for the calendar. This allows me to align their internal widgeths more easily.
