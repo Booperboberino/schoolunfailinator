@@ -27,7 +27,8 @@ class listItem:
 
     #Takes parameters for the item name and the length of time in minutes, plus some other gui stuff. 
 
-    def __init__(self, itemname, timelength, parentWidget, r, c):
+    def __init__(self, itemname, timelength, parentWidget, r, c, checked = False):
+        self.itemname = itemname
         self.itemString = itemname.capitalize() + " (" +str(timelength)+" Minutes)"
 
         self.bullet = Frame(parentWidget, padx= 20, pady = 5, bg = dark_color)
@@ -37,16 +38,20 @@ class listItem:
         self.bulletLabel.grid(row = 0, column = 0)
         self.checkbox = tk.Button(self.bullet, text = "  ", bg = "white", command = self.switchButton, padx = 5)
         self.checkbox.grid(row = 0, column = 1)
-
+        self.checked = checked
         self.buttonStatus = "white"
+        if checked: self.switchButton()
         
     def switchButton(self):
         if self.buttonStatus == "white":
             self.checkbox.config(bg = "black")
             self.buttonStatus = "black"
+            self.checked = True
         else:
             self.checkbox.config(bg = "white")
             self.buttonStatus = "white"
+            self.checked = False
+        self.updateComplete()
         
     def __str__(self):
         return self.itemString
@@ -55,6 +60,12 @@ class listItem:
         self.bullet.destroy()
         self.bulletLabel.destroy()
         self.checkbox.destroy()
+
+    def updateComplete(self):
+        global selectedDate
+        fileSystem.editToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"],self.itemname,self.checked)
+
+
 
 
 #CALENDAR
@@ -125,7 +136,7 @@ def updateToDo():
     dayTasks = fileSystem.getToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
     jeff = 1
     for i in dayTasks:
-        arr.append(listItem(i,0,todoFrame,jeff,0))
+        arr.append(listItem(i,0,todoFrame,jeff,0,dayTasks[i]))
         jeff +=1
     print(arr)
 
