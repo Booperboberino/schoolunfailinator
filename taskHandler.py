@@ -1,5 +1,8 @@
-from loader import Loader
+
+from main import Loader
+from loader import Loader as ld
 from task import Task
+# Loader = ld()
 
 class TaskHandler:
 

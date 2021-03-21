@@ -2,8 +2,9 @@ from loader import Loader as ld
 import tkinter as tk
 from tkinter import Frame, simpledialog
 import datetime
-import taskHandler
+from taskHandler import TaskHandler as th
 Loader = ld()
+TaskHandler = th
 
 arr = []
 temp = str(datetime.date.today())
@@ -193,7 +194,7 @@ def onAddEventClick():
         eventDate = simpledialog.askstring("Input","When is the assignment due? [mm/dd/yyyy]",parent=root)
 
     try:
-        taskHandler.addTask(eventName, eventDate)
+        TaskHandler.addTask(eventName, eventDate)
 
         #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
     except:
