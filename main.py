@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import Frame, simpledialog
 import datetime
 import taskHandler
+import fileSystem
 Loader = ld()
 
 arr = []
@@ -171,7 +172,18 @@ class calendarGrid:
     def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
         for r in range(len(self.dayGrid)):
             for c in range(len(self.dayGrid[r])):
-                self.dayGrid[r][c].unClick()     
+                self.dayGrid[r][c].unClick()
+
+    def updateTasksLeft(self):
+        global selectedDate   
+        dayCounter = 0  
+        for r in range(len(self.dayGrid)):
+            for c in range(len(self.dayGrid[r])):
+                alteredDays = ""
+                if dayCounter < 10: alteredDays = "0"
+                selectedDate["day"] = alteredDays + str(dayCounter)
+                self.dayGrid[r][c].updateTasksLeft()
+                dayCounter += 1
 
 #----------------------ADD / DEL ASSIGNMENT FUNCTIONS-----------
 
@@ -184,26 +196,35 @@ def isValidDate(date):
         return False
 
 def onAddEventClick():
+    global calendarDemo
+    global selectedDate
+    currentDate = selectedDate.copy()
     #get information from user via popup: name, due date [MM/DD/YYYY]
     eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
     eventDate = "not a correct date"
-
     
     while not isValidDate(eventDate):
         eventDate = simpledialog.askstring("Input","When is the assignment due? [mm/dd/yyyy]",parent=root)
 
-    try:
-        taskHandler.addTask(eventName, eventDate)
 
-        #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
-    except:
-        pass
-    
-    #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
+    #taskHandler.addTask(eventName, eventDate)
 
+    eventDateArr = eventDate.split("/")
+    fileSystem.editToDo(eventDateArr[2], eventDateArr[0], eventDateArr[1], eventName)
+    calendarDemo.updateTasksLeft()
+    selectedDate = currentDate
+    updateToDo()
 
 def onDelEventClick():
+    global calendarDemo
+    global selectedDate
+    currentDate = selectedDate.copy()
     eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
+
+    Loader.removeToDoItem(selectedDate["year"], selectedDate["month"], selectedDate["day"], eventName.lower())
+    calendarDemo.updateTasksLeft()
+    selectedDate = currentDate
+    updateToDo()
 
 
 def updateToDo(): #updates the todo list on the screen
@@ -233,6 +254,7 @@ todoFrame = Frame(root, bg = dark_color)
 calendarFrame.grid(row = 0, column = 0)
 todoFrame.grid(row = 0, column = 1)
 
+calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
 """
 #These are hardcoded listItem objects for demonstration purposes. THIS IS NOT THE FINAL PRODUCT. Currently unsure how clicking on the day will update the toDoList. 
 
@@ -247,7 +269,7 @@ updateToDo()
 #               '31' - will be replaced with integer of days in the current month
 #               '1' - Will have to be replaced with the integer of the first weekday of the month. 0 = Sunday, 1 = Monday, 2 = Tuesday, etc.
 #don't touch calenderFrame
-calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
+
 
 
 #These are the add/remove assignment buttons. Edit the "command" parameters with the appropriate function. If the function has its own parameters, use this... command = lambda: functionName(param)

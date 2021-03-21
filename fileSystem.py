@@ -3,6 +3,7 @@ from task import Task
 #I haven't tested some of this stuff in a while so no guarantee it all works
 def editToDo(year,month,day,task,done = False): #either changes or adds a value to the to do list
     global fileName
+    task = task.lower()
     createDay(year,month,day)
     f = open(fileName)
     data = json.load(f)
@@ -93,6 +94,7 @@ def removeDay(year,month,day): #removes a day and its month and/or year if made 
 
 def removeToDoItem(year,month,day,task): #removes an item from the to do list and updates the completed or remaining values
     global fileName
+    task = task.lower()
     createDay(year,month,day)
     f = open(fileName)
     data = json.load(f)
@@ -123,5 +125,5 @@ def jsonToTask(task, year="2020",month="03",day="21"):
     return Task(name=task, due_date=dueDate)
 
 
-fileName = "files.json"
+fileName = "txt/files.json"
 
