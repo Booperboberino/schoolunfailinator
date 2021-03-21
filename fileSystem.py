@@ -1,4 +1,6 @@
 import json
+from task import Task
+import taskHandler
 #I haven't tested some of this stuff in a while so no guarantee it all works
 def editToDo(year,month,day,task,done = False): #either changes or adds a value to the to do list
     global fileName
@@ -117,5 +119,9 @@ def resetJSON(): #completey resest the .json file, pog for testing
     json.dump({},f,indent = 2)
     f.close()
 
-fileName = "files.json"
+def jsonToTask(task, year="2020",month="03",day="21"):
+    dueDate = month + "/" + day + "/" + year
+    return Task(name=task, due_date=dueDate)
 
+
+fileName = "files.json"
