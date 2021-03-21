@@ -1,3 +1,5 @@
+from task import Task
+
 class loader():
 
 
@@ -9,6 +11,10 @@ class loader():
             for i in fp:
                 print(i)
         return "a"
+
+    def addTask(Task: Task):
+        Task.
+
 
 
 with open("txt/testdata.txt", "r") as fp:
