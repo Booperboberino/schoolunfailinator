@@ -12,8 +12,10 @@ class Task():
 
     '''
 
-    def __init__(self, name='blank', due_date='1/1/2021', id=0):
-        self.id = id
+
+    def __init__(self, id: int, name: str, due_date: str):
+        #self.id = taskHandler.findUniqueId()
+
         self.name = name
         self.due_date = datetodatetime(due_date)
         self.is_complete = False
