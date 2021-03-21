@@ -108,6 +108,7 @@ def removeToDoItem(year,month,day,task): #removes an item from the to do list an
         dayInfo["remaining"] -= 1
     else:
         dayInfo["completed"] -=1
+
     del dayInfo["toDo"][task]
     data[str(year)][str(month)][str(day)] = dayInfo
     f = open(fileName,'w')

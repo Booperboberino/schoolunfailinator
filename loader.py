@@ -108,6 +108,7 @@ class Loader():
             dayInfo["remaining"] -= 1
         else:
             dayInfo["completed"] -=1
+
         del dayInfo["toDo"][task]
         data[str(year)][str(month)][str(day)] = dayInfo
         f = open(self.fileName,'w')
