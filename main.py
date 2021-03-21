@@ -4,7 +4,9 @@ from tkinter import Frame, simpledialog
 import datetime
 import taskHandler
 import fileSystem
+from taskHandler import TaskHandler as th
 Loader = ld()
+TaskHandler = th
 
 arr = []
 temp = str(datetime.date.today())
