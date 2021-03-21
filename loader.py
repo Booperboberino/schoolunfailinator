@@ -12,8 +12,8 @@ class loader():
                 print(i)
         return "a"
 
-    def addTask(Task: Task):
-        Task.
+    def addTask(task: Task):
+        task.
 
 
 

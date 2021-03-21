@@ -13,7 +13,7 @@ class Task():
     '''
 
 
-    def __init__(self, id: int, name: str, due_date: str):
+    def __init__(self, name: str, due_date: str, id: int = None):
         #self.id = taskHandler.findUniqueId()
 
         self.name = name
