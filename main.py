@@ -73,9 +73,9 @@ class listItem:
 class calendarDay:
     #This class contains the individual day buttons. Need to expand the onClick function to alter the todo list. These objects are automatically made by calenderGrid.
 
-    def __init__(self, dayNum, tasksToDo, parentgrid, row, col):
+    def __init__(self, dayNum, tasksDone, tasksToDo, parentgrid, row, col):
         self.dayNum = dayNum
-        self.button = tk.Button(parentgrid, text = str(dayNum)+"\n\nTasks: "+str(tasksToDo), command = self.onClick)
+        self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
         
@@ -120,6 +120,8 @@ class calendarGrid:
     #Method that creates the actual calendar. May need to be modifed to give each day a list of tasks that can be displayed, or at the very minium a way of determing the tasks for each day. 
     
     def addDays(self, days):
+        global selectedDate
+        print(selectedDate)
 
         dayCounter = 0
         
@@ -128,9 +130,19 @@ class calendarGrid:
             for c in range(7):
 
                 if r == 0 and c < self.startcol:
-                    self.dayGrid[r].append(calendarDay("/", "/", self.calendar, r, c)) 
+                    self.dayGrid[r].append(calendarDay("/", "/", "/", self.calendar, r, c)) 
                 elif dayCounter <= days:
-                    self.dayGrid[r].append(calendarDay(dayCounter, 3, self.calendar, r, c)) #The three is a placeholder.
+                    alteredDays = ""
+                    if dayCounter < 10: alteredDays = "0"
+                    temp = fileSystem.getDayInfo(selectedDate["year"],selectedDate["month"],alteredDays+str(dayCounter))
+                    print(selectedDate["year"],selectedDate["month"],alteredDays+str(dayCounter))
+                    if temp == {}:
+                        completed = ""
+                        remaining = ""
+                    else:
+                        completed = str(temp["completed"])
+                        remaining = str(temp["remaining"])
+                    self.dayGrid[r].append(calendarDay(dayCounter, completed, remaining, self.calendar, r, c)) #The three is a placeholder.
                 dayCounter += 1
                 
     def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
