@@ -17,6 +17,8 @@ class Task():
         self.name = name
         self.due_date = datetodatetime(due_date)
         self.is_complete = False
+
+        # ended up putting workdays with the task becasue it didn't make much sense to have a separate object for them
         self.work_days = []
         self.work_time = 0
 
