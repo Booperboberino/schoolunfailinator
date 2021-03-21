@@ -22,7 +22,8 @@ class TaskHandler:
     def addTask(self, name: str, date):
         id = findUniqueId()
         task = Task(name, date)
-        self.tasks.append()
+        self.tasks.append(task)
+        loader.addTask(task)
 
         
 
