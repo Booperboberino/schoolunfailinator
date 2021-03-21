@@ -1,5 +1,17 @@
 import tkinter as tk
 from tkinter import Frame
+import fileSystem
+import datetime
+
+arr = []
+temp = str(datetime.date.today())
+temp = temp.split("-")
+selectedDate = {"year":0,"month":0,"day":0}
+jeff = 0
+for i in selectedDate:
+    selectedDate[i] = temp[jeff]
+    jeff += 1
+print(selectedDate)
 
 dark_color = "midnight blue"
 light_color = "white"
@@ -21,7 +33,8 @@ class listItem:
         self.bullet = Frame(parentWidget, padx= 20, pady = 5, bg = dark_color)
         self.bullet.grid(row = r, column = c)
 
-        self.bulletLabel = tk.Label(self.bullet, text = self.itemString, padx = 20, bg = dark_color, fg = light_color).grid(row = 0, column = 0)
+        self.bulletLabel = tk.Label(self.bullet, text = self.itemString, padx = 20, bg = dark_color, fg = light_color)
+        self.bulletLabel.grid(row = 0, column = 0)
         self.checkbox = tk.Button(self.bullet, text = "  ", bg = "white", command = self.switchButton, padx = 5)
         self.checkbox.grid(row = 0, column = 1)
 
@@ -38,6 +51,11 @@ class listItem:
     def __str__(self):
         return self.itemString
 
+    def clear(self):
+        self.bullet.destroy()
+        self.bulletLabel.destroy()
+        self.checkbox.destroy()
+
 
 #CALENDAR
 
@@ -45,19 +63,25 @@ class calendarDay:
     #This class contains the individual day buttons. Need to expand the onClick function to alter the todo list. These objects are automatically made by calenderGrid.
 
     def __init__(self, dayNum, tasksToDo, parentgrid, row, col):
-        
+        self.dayNum = dayNum
         self.button = tk.Button(parentgrid, text = str(dayNum)+"\n\nTasks: "+str(tasksToDo), command = self.onClick)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
         
     def onClick(self):
+        global selectedDate
         #switch from light to dark when pressed. 
         if not self.currentlyPressed:
             self.button.config(bg = "black", fg = "white")
             self.currentlyPressed = True
+            temp = ""
+            if self.dayNum < 10: temp = " "
+            selectedDate["day"] = temp + str(self.dayNum)
+            updateToDo()
         else:
             self.button.config(bg = "white", fg = "black")
             self.currentlyPressed = False
+        print(selectedDate)
 
 class calendarGrid:
     
@@ -90,7 +114,22 @@ class calendarGrid:
                     self.dayGrid[r].append(calendarDay(dayCounter, 3, self.calendar, r, c)) #The three is a placeholder.
                 dayCounter += 1
                 
-    
+
+def updateToDo():
+    global selectedDate
+    global arr
+    print(arr)
+    for i in arr:
+        i.clear()
+    arr = []
+    dayTasks = fileSystem.getToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
+    jeff = 1
+    for i in dayTasks:
+        arr.append(listItem(i,0,todoFrame,jeff,0))
+        jeff +=1
+    print(arr)
+
+      
 #------------------THE ACTUAL CODE THAT MAKES THE WINDOW EXIST----------------------
 
 
@@ -105,10 +144,14 @@ todoFrame = Frame(root, bg = dark_color)
 calendarFrame.grid(row = 0, column = 0)
 todoFrame.grid(row = 0, column = 1)
 
+"""
 #These are hardcoded listItem objects for demonstration purposes. THIS IS NOT THE FINAL PRODUCT. Currently unsure how clicking on the day will update the toDoList. 
-arr = []
+
 for i in range(1, 8):
     arr.append(listItem("Item "+str(i), i * 10, todoFrame, i, 0))
+"""
+updateToDo()
+
 
 #This creates the calendar.
 #Placeholders:  'March' - will have to be replaced with a string of the current month

@@ -57,8 +57,8 @@ def getDayInfo(year,month,day): #returns dictionary for a day
     f.close() 
     return data[str(year)][str(month)][str(day)]
 
-def getToDo(): #kinda redundant since get day info, but it exists cause yeah
-    dayInfo = getDayInfo()
+def getToDo(year,month,day): #kinda redundant since get day info, but it exists cause yeah
+    dayInfo = getDayInfo(year,month,day)
     if dayInfo == {}:
         return dayInfo
     return dayInfo["toDo"]
