@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import Frame
+from tkinter import Frame, simpledialog
+
+import task, taskHandler
 
 dark_color = "midnight blue"
 light_color = "white"
@@ -90,7 +92,41 @@ class calendarGrid:
                     self.dayGrid[r].append(calendarDay(dayCounter, 3, self.calendar, r, c)) #The three is a placeholder.
                 dayCounter += 1
                 
+#----------------------ADD / DEL ASSIGNMENT FUNCTIONS-----------
+
+def isValidDate(date):
+    try:
+        if len(date) != 10 or int(date[0:2]) > 12 or int(date[0:2]) <= 0 or date[2] != "/" or int(date[3:5]) > 31 or int(date[3:5]) <= 0 or date[5] != "/":
+            return False
+        return True
+    except:
+        return False
+
+def onAddEventClick():
+    #get information from user via popup: name, due date [MM/DD/YYYY]
+    eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
+    eventDate = "not a correct date"
+
     
+    while not isValidDate(eventDate):
+        eventDate = simpledialog.askstring("Input","When is the assignment due? [mm/dd/yyyy]",parent=root)
+
+    """
+    try:
+        taskHandler.addTask(eventName, eventDate)
+    except:
+        pass
+    """
+    #get list of potential dates using daystowork, maybe have to assume all days / no weekends? 
+
+
+def onDelEventClick():
+    pass
+    #get information from user via popup: name, due date [MM/DD/YYYY]
+
+
+
+
 #------------------THE ACTUAL CODE THAT MAKES THE WINDOW EXIST----------------------
 
 
@@ -119,7 +155,7 @@ calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
 
 
 #These are the add/remove assignment buttons. Edit the "command" parameters with the appropriate function. If the function has its own parameters, use this... command = lambda: functionName(param)
-addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = lambda: print("hello world!"))
+addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = onAddEventClick)
 addAssignmentButton.grid(row = 2, column = 0)
 
 delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = lambda: print("goodbye world!"))
