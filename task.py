@@ -113,6 +113,3 @@ def daysToWork(task):
     # finish up by creating a work on task object for each one per day
     task.addWorkDays(selected_dates)
 
-my_task = Task('Hello', '4/21/2021')
-print(my_task)
-daysToWork(my_task)
