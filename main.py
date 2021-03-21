@@ -1,8 +1,9 @@
-from loader import Loader
+from loader import Loader as ld
 import tkinter as tk
 from tkinter import Frame, simpledialog
 import datetime
-import task, taskHandler
+import taskHandler
+Loader = ld()
 
 arr = []
 temp = str(datetime.date.today())

@@ -1,6 +1,5 @@
 import json
 from task import Task
-import taskHandler
 #I haven't tested some of this stuff in a while so no guarantee it all works
 def editToDo(year,month,day,task,done = False): #either changes or adds a value to the to do list
     global fileName
