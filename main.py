@@ -11,7 +11,7 @@ jeff = 0
 for i in selectedDate:
     selectedDate[i] = temp[jeff]
     jeff += 1
-print(selectedDate)
+#print(selectedDate)
 
 dark_color = "midnight blue"
 light_color = "white"
@@ -40,9 +40,9 @@ class listItem:
         self.checkbox.grid(row = 0, column = 1)
         self.checked = checked
         self.buttonStatus = "white"
-        if checked: self.switchButton()
+        if checked: self.switchButton() #allows task to start completed (useful for getting one from memory)
         
-    def switchButton(self):
+    def switchButton(self): #switches button color and changes if a task is done or not
         if self.buttonStatus == "white":
             self.checkbox.config(bg = "black")
             self.buttonStatus = "black"
@@ -56,12 +56,12 @@ class listItem:
     def __str__(self):
         return self.itemString
 
-    def clear(self):
+    def clear(self): #some of Brian's sorcery that helps to do list update
         self.bullet.destroy()
         self.bulletLabel.destroy()
         self.checkbox.destroy()
 
-    def updateComplete(self):
+    def updateComplete(self): #changes boolean value of task in .json file to match check box
         global selectedDate
         fileSystem.editToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"],self.itemname,self.checked)
 
@@ -81,18 +81,26 @@ class calendarDay:
         
     def onClick(self):
         global selectedDate
+        global calendarDemo
         #switch from light to dark when pressed. 
         if not self.currentlyPressed:
+            calendarDemo.clearClicked()
             self.button.config(bg = "black", fg = "white")
             self.currentlyPressed = True
             temp = ""
-            if self.dayNum < 10: temp = " "
-            selectedDate["day"] = temp + str(self.dayNum)
-            updateToDo()
+            if self.dayNum < 10: temp = "0"
+            selectedDate["day"] = temp + str(self.dayNum) #changes day of date to calendar day
+            updateToDo() #updates toDo list for that day
         else:
             self.button.config(bg = "white", fg = "black")
             self.currentlyPressed = False
+            selectedDate["day"] = "0" #changes day to day 0, supposed to be some blank day so that declicking a day removes its todo list
+            updateToDo()
         print(selectedDate)
+
+    def unClick(self): #unclicks a button
+            self.button.config(bg = "white", fg = "black")
+            self.currentlyPressed = False
 
 class calendarGrid:
     
@@ -125,20 +133,22 @@ class calendarGrid:
                     self.dayGrid[r].append(calendarDay(dayCounter, 3, self.calendar, r, c)) #The three is a placeholder.
                 dayCounter += 1
                 
+    def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
+        for r in range(len(self.dayGrid)):
+            for c in range(len(self.dayGrid[r])):
+                self.dayGrid[r][c].unClick()
 
-def updateToDo():
+def updateToDo(): #updates the todo list on the screen
     global selectedDate
     global arr
-    print(arr)
     for i in arr:
         i.clear()
     arr = []
-    dayTasks = fileSystem.getToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
-    jeff = 1
-    for i in dayTasks:
+    dayTasks = fileSystem.getToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"]) #gets selected day's tasks
+    jeff = 1 #count variable
+    for i in dayTasks:#sets up todolist
         arr.append(listItem(i,0,todoFrame,jeff,0,dayTasks[i]))
         jeff +=1
-    print(arr)
 
       
 #------------------THE ACTUAL CODE THAT MAKES THE WINDOW EXIST----------------------
