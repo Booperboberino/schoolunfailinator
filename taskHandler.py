@@ -31,7 +31,7 @@ class TaskHandler:
         pass
 
     # Does not return
-    def editTask(self, id:int, name: str, ):
+    def editTask(self, id:int, name: str):
 
         pass
 
