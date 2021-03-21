@@ -1,4 +1,4 @@
-import loader
+from loader import Loader
 from task import Task
 
 class TaskHandler:
@@ -20,17 +20,18 @@ class TaskHandler:
 
     # Does not return
     def addTask(self, name: str, date):
-        id = findUniqueId()
-        task = Task(name, date)
+        id = self.findUniqueId()
+        task = Task(name=name, due_date=date)
         self.tasks.append(task)
-        loader.addTask(task)
+        Loader.addTask(task)
 
         
 
-    def addWorkTast(self, id: int, date):
+    def addWorkTask(self, id: int, date):
+        pass
 
     # Does not return
-    def editTask(self, id:int, name: str, ):
+    def editTask(self, id:int, name: str):
 
         pass
 
@@ -41,8 +42,8 @@ class TaskHandler:
     
     # Get the number of tasks in one day
     # Returns int
-    def numberOfTasksOnDay(self, day:dayType):
+    def numberOfTasksOnDay(self, day):
         cnt = 0
-        for a in loader.getListOfTasks:   # Get list of tasks in one day
+        for a in Loader.getListOfTasks:   # Get list of tasks in one day             wip
             cnt += 1
         return cnt

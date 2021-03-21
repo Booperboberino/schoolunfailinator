@@ -1,9 +1,10 @@
 from task import Task
 
-class loader():
+class Loader():
 
 
-    # __init__(self):
+    def __init__(self):
+        pass
 
     # Loads every date 
     def loadAllDates(self):
@@ -12,8 +13,10 @@ class loader():
                 print(i)
         return "a"
 
-    def addTask(Task: Task):
-        Task.
+    def addTask(self, task: Task):
+        # put it in file plz thank
+        beans = True
+        pass
 
 
 

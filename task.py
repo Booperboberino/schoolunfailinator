@@ -13,7 +13,7 @@ class Task():
     '''
 
 
-    def __init__(self, id: int, name: str, due_date: str):
+    def __init__(self, name: str, due_date: str, id: int = None):
         #self.id = taskHandler.findUniqueId()
 
         self.name = name
@@ -113,6 +113,3 @@ def daysToWork(task):
     # finish up by creating a work on task object for each one per day
     task.addWorkDays(selected_dates)
 
-my_task = Task('Hello', '4/21/2021')
-print(my_task)
-daysToWork(my_task)
