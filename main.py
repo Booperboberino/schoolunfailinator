@@ -1,7 +1,8 @@
+from loader import Loader
 import tkinter as tk
 from tkinter import Frame, simpledialog
 import datetime
-import task, taskHandler, fileSystem
+import task, taskHandler
 
 arr = []
 temp = str(datetime.date.today())
@@ -70,7 +71,7 @@ class listItem:
     def updateComplete(self): #changes boolean value of task in .json file to match check box
         global selectedDate
         global update
-        fileSystem.editToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"],self.itemname,self.checked)
+        Loader.editToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"],self.itemname,self.checked)
 
 
 
@@ -119,7 +120,7 @@ class calendarDay:
 
     def updateTasksLeft(self):
         global selectedDate
-        data = fileSystem.getDayInfo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
+        data = Loader.getDayInfo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
         if data != {}:
             self.button['text'] = str(selectedDate["day"])+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"]) 
 
@@ -156,7 +157,7 @@ class calendarGrid:
                 elif dayCounter <= days:
                     alteredDays = ""
                     if dayCounter < 10: alteredDays = "0"
-                    temp = fileSystem.getDayInfo(selectedDate["year"],selectedDate["month"],alteredDays+str(dayCounter))
+                    temp = Loader.getDayInfo(selectedDate["year"],selectedDate["month"],alteredDays+str(dayCounter))
                     if temp == {}:
                         completed = ""
                         remaining = ""
@@ -203,7 +204,7 @@ def onAddEventClick():
 def onDelEventClick():
     eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
 
-    fileSystem.removeToDoItem(selectedDate["year"], selectedDate["month"], selectedDate["day"], eventName.lower())
+    Loader.removeToDoItem(selectedDate["year"], selectedDate["month"], selectedDate["day"], eventName.lower())
 
 def updateToDo(): #updates the todo list on the screen
     global selectedDate
@@ -211,7 +212,7 @@ def updateToDo(): #updates the todo list on the screen
     for i in arr:
         i.clear()
     arr = []
-    dayTasks = fileSystem.getToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"]) #gets selected day's tasks
+    dayTasks = Loader.getToDo(selectedDate["year"],selectedDate["month"],selectedDate["day"]) #gets selected day's tasks
     jeff = 1 #count variable
     for i in dayTasks:#sets up todolist
         arr.append(listItem(i,0,todoFrame,jeff,0,dayTasks[i]))
