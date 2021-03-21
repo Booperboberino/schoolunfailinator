@@ -2,7 +2,7 @@ import json
 #I haven't tested some of this stuff in a while so no guarantee it all works
 def editToDo(year,month,day,task,done = False): #either changes or adds a value to the to do list
     global fileName
-    createDay()
+    createDay(year,month,day)
     f = open(fileName)
     data = json.load(f)
     f.close()
@@ -92,7 +92,7 @@ def removeDay(year,month,day): #removes a day and its month and/or year if made 
 
 def removeToDoItem(year,month,day,task): #removes an item from the to do list and updates the completed or remaining values
     global fileName
-    createDay()
+    createDay(year,month,day)
     f = open(fileName)
     data = json.load(f)
     f.close()
@@ -118,3 +118,4 @@ def resetJSON(): #completey resest the .json file, pog for testing
     f.close()
 
 fileName = "files.json"
+
