@@ -23,7 +23,7 @@ class TaskHandler:
         id = self.findUniqueId()
         task = Task(name=name, due_date=date)
         self.tasks.append(task)
-        Loader.addTask(task)
+        Loader.addTask(task=task)
 
         
 
