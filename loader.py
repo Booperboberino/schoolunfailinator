@@ -5,7 +5,7 @@ import taskHandler
 class Loader():
 
     def __init__(self):
-        self.fileName=""
+        self.fileName="txt/files.json"
         pass
 
     def createDay(self,year,month,day): #creates blank day if not in .json and also creates year and month if necessary
@@ -143,11 +143,8 @@ class Loader():
         beans = True
         pass
 
-
-
 with open("txt/testdata.txt", "r") as fp:
     cnt = 0
     for i in fp:
         # do
         ""
-
