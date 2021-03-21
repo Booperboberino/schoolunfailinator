@@ -23,16 +23,16 @@ def editToDo(year,month,day,task,done = False): #either changes or adds a value 
                 dayInfo["remaining"]+=1
     else: #adds new item to toDo and updates completed or remaining depending on if said new item is completed
         dayInfo["toDo"][task] = done
-            if done == True:
-                dayInfo["completed"]+=1
-            else:
-                dayInfo["remaining"]+=1
+        if done == True:
+            dayInfo["completed"]+=1
+        else:
+            dayInfo["remaining"]+=1
     data[str(year)][str(month)][str(day)] = dayInfo
     f = open(fileName,'w')
     json.dump(data,f,indent = 2)
     f.close()    
     
- 
+
 def createDay(year,month,day): #creates blank day if not in .json and also creates year and month if necessary
     global fileName
     listyBoi = [str(year), str(month), str(day)]
