@@ -1,6 +1,5 @@
 import json
 from task import Task
-import taskHandler
 
 class Loader():
 
