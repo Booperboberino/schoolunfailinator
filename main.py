@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import Frame, simpledialog
-
-import task, taskHandler
+import datetime
+import task, taskHandler, fileSystem
 
 arr = []
 temp = str(datetime.date.today())
@@ -166,6 +166,10 @@ class calendarGrid:
                     self.dayGrid[r].append(calendarDay(dayCounter, completed, remaining, self.calendar, r, c)) #The three is a placeholder.
                 dayCounter += 1
                 
+    def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
+        for r in range(len(self.dayGrid)):
+            for c in range(len(self.dayGrid[r])):
+                self.dayGrid[r][c].unClick()               
 #----------------------ADD / DEL ASSIGNMENT FUNCTIONS-----------
 
 def isValidDate(date):
@@ -201,10 +205,7 @@ def onDelEventClick():
 
 
 
-    def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
-        for r in range(len(self.dayGrid)):
-            for c in range(len(self.dayGrid[r])):
-                self.dayGrid[r][c].unClick()
+
 
 def updateToDo(): #updates the todo list on the screen
     global selectedDate
