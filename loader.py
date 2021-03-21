@@ -81,7 +81,7 @@ class Loader():
         initValues = {"completed":0,"remaining":0,"toDo":{}}
         data[str(year)][str(month)][str(day)] = initValues
         f.close()
-        f = open(fileName,'w')
+        f = open(self.fileName,'w')
         json.dump(data,f,indent = 2)
         f.close()
 
