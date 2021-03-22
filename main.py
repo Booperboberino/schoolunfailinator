@@ -2,17 +2,21 @@ from loader import Loader as ld
 import tkinter as tk
 from tkinter import Frame, simpledialog
 import datetime
-import taskHandler
+#import taskHandler
+import fileSystem
+#from taskHandler import TaskHandler as th
 Loader = ld()
+#TaskHandler = th
 
 arr = []
 temp = str(datetime.date.today())
 temp = temp.split("-")
-selectedDate = {"year":0,"month":0,"day":0}
+selectedDate = {"year":"2021","month":"03","day":"31"}
 jeff = 0
-for i in selectedDate:
-    selectedDate[i] = temp[jeff]
-    jeff += 1
+if temp[1]=="03":
+    for i in selectedDate:
+        selectedDate[i] = temp[jeff]
+        jeff += 1
 #print(selectedDate)
 
 squareRow = 0
@@ -33,7 +37,6 @@ class listItem:
     def __init__(self, itemname, timelength_NOTUSINGTHIS, parentWidget, r, c, checked = False):
         self.itemname = itemname
         self.itemString = itemname.capitalize()
-
         self.bullet = Frame(parentWidget, padx= 20, pady = 5, bg = dark_color)
         self.bullet.grid(row = r, column = c)
 
@@ -83,6 +86,7 @@ class calendarDay:
     #This class contains the individual day buttons. Need to expand the onClick function to alter the todo list. These objects are automatically made by calenderGrid.
 
     def __init__(self, dayNum, tasksDone, tasksToDo, parentgrid, row, col):
+        global selectedDate
         self.parentgrid = parentgrid
         self.row = row
         self.column = col
@@ -90,6 +94,18 @@ class calendarDay:
         self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10, bg = light_color)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
+
+        temp = ""
+        if dayNum != "/" and int(dayNum) < 10:
+            temp = "0"      
+        data = Loader.getDayInfo(selectedDate["year"],selectedDate["month"],temp + str(dayNum))
+        if data != {}:
+            if not ("completed" not in data or "remaining" not in data):
+                if data["completed"] <= 0 and data["remaining"] <= 0:
+                    self.button['text'] = str(selectedDate["day"])+"\nDone: \nTasks: "
+                else:
+                    self.button['text'] = str(selectedDate["day"])+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"])
+        
         
     def onClick(self):
         global squareColumn
@@ -113,7 +129,7 @@ class calendarDay:
             self.currentlyPressed = False
             selectedDate["day"] = "0" #changes day to day 0, supposed to be some blank day so that declicking a day removes its todo list
             updateToDo()
-        print(selectedDate)
+        #print(selectedDate)
 
     def unClick(self): #unclicks a button
             self.button.config(bg = "white", fg = "black")
@@ -123,7 +139,11 @@ class calendarDay:
         global selectedDate
         data = Loader.getDayInfo(selectedDate["year"],selectedDate["month"],selectedDate["day"])
         if data != {}:
-            self.button['text'] = str(selectedDate["day"])+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"]) 
+            if not ("completed" not in data or "remaining" not in data):
+                if data["completed"] <= 0 and data["remaining"] <= 0:
+                    self.button['text'] = str(selectedDate["day"])+"\nDone: \nTasks: "
+                else:
+                    self.button['text'] = str(selectedDate["day"])+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"]) 
 
 
 class calendarGrid:
@@ -145,7 +165,7 @@ class calendarGrid:
     
     def addDays(self, days):
         global selectedDate
-        print(selectedDate)
+        #print(selectedDate)
 
         dayCounter = 0
         
@@ -162,7 +182,7 @@ class calendarGrid:
                     if temp == {}:
                         completed = ""
                         remaining = ""
-                    else:
+                    elif not ("completed" not in temp or "remaining" not in temp):
                         completed = str(temp["completed"])
                         remaining = str(temp["remaining"])
                     self.dayGrid[r].append(calendarDay(dayCounter, completed, remaining, self.calendar, r, c)) #The three is a placeholder.
@@ -171,7 +191,20 @@ class calendarGrid:
     def clearClicked(self): #unclicks all tiles to prevent creation of smiley faces and other images on the calendar
         for r in range(len(self.dayGrid)):
             for c in range(len(self.dayGrid[r])):
-                self.dayGrid[r][c].unClick()     
+                self.dayGrid[r][c].unClick()
+
+    def updateTasksLeft(self):
+        global selectedDate   
+        dayCounter = 0  
+        for r in range(len(self.dayGrid)):
+            for c in range(len(self.dayGrid[r])):
+                if r == 0 and c < self.startcol:
+                    pass
+                alteredDays = ""
+                if dayCounter < 10: alteredDays = "0"
+                selectedDate["day"] = alteredDays + str(dayCounter)
+                self.dayGrid[r][c].updateTasksLeft()
+                dayCounter += 1
 
 #----------------------ADD / DEL ASSIGNMENT FUNCTIONS-----------
 
@@ -184,6 +217,9 @@ def isValidDate(date):
         return False
 
 def onAddEventClick():
+    global calendarDemo
+    global selectedDate
+    currentDate = selectedDate.copy()
     #get information from user via popup: name, due date [MM/DD/YYYY]
     eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
     eventDate = "not a correct date"
@@ -201,11 +237,23 @@ def onAddEventClick():
     
 
 
+    eventDateArr = eventDate.split("/")
+    fileSystem.editToDo(eventDateArr[2], eventDateArr[0], eventDateArr[1], eventName)
+    calendarDemo.updateTasksLeft()
+    selectedDate = currentDate
+    updateToDo()
 
 def onDelEventClick():
+    global calendarDemo
+    global selectedDate
+    currentDate = selectedDate.copy()
     eventName = simpledialog.askstring("Input","What is the assignment name? ",parent=root)
 
     Loader.removeToDoItem(selectedDate["year"], selectedDate["month"], selectedDate["day"], eventName.lower())
+    calendarDemo.updateTasksLeft()
+    selectedDate = currentDate
+    updateToDo()
+
 
 def updateToDo(): #updates the todo list on the screen
     global selectedDate
@@ -234,6 +282,7 @@ todoFrame = Frame(root, bg = dark_color)
 calendarFrame.grid(row = 0, column = 0)
 todoFrame.grid(row = 0, column = 1)
 
+calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
 """
 #These are hardcoded listItem objects for demonstration purposes. THIS IS NOT THE FINAL PRODUCT. Currently unsure how clicking on the day will update the toDoList. 
 
@@ -248,7 +297,7 @@ updateToDo()
 #               '31' - will be replaced with integer of days in the current month
 #               '1' - Will have to be replaced with the integer of the first weekday of the month. 0 = Sunday, 1 = Monday, 2 = Tuesday, etc.
 #don't touch calenderFrame
-calendarDemo = calendarGrid("March", 31, 1, calendarFrame)
+
 
 
 #These are the add/remove assignment buttons. Edit the "command" parameters with the appropriate function. If the function has its own parameters, use this... command = lambda: functionName(param)

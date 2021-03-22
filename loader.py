@@ -8,7 +8,6 @@ class Loader():
         pass
 
     def createDay(self,year,month,day): #creates blank day if not in .json and also creates year and month if necessary
-        global fileName
         listyBoi = [str(year), str(month), str(day)]
         f = open(self.fileName)
         data = json.load(f)
@@ -23,7 +22,6 @@ class Loader():
         f.close()
     #I haven't tested some of this stuff in a while so no guarantee it all works
     def editToDo(self,year,month,day,task,done = False): #either changes or adds a value to the to do list
-        global fileName
         self.createDay(year,month,day)
         f = open(self.fileName)
         data = json.load(f)
@@ -58,7 +56,6 @@ class Loader():
     
 
     def getDayInfo(self,year,month,day): #returns dictionary for a day
-        global fileName
         self.createDay(year,month,day)
         
         f = open(self.fileName)
@@ -73,7 +70,6 @@ class Loader():
         return dayInfo["toDo"]
 
     def initDay(self,year,month,day): #initializes/resets a day
-        global fileName
         self.createDay(year,month,day)
         f = open(self.fileName)
         data = json.load(f)
@@ -85,7 +81,6 @@ class Loader():
         f.close()
 
     def removeDay(self,year,month,day): #removes a day and its month and/or year if made empty
-        global fileName
         self.createDay(year,month,day)
         f = open(self.fileName)
         data = json.load(f)    
@@ -100,7 +95,6 @@ class Loader():
         f.close()
 
     def removeToDoItem(self,year,month,day,task): #removes an item from the to do list and updates the completed or remaining values
-        global fileName
         self.createDay(year,month,day)
         f = open(self.fileName)
         data = json.load(f)
@@ -114,6 +108,7 @@ class Loader():
             dayInfo["remaining"] -= 1
         else:
             dayInfo["completed"] -=1
+
         del dayInfo["toDo"][task]
         data[str(year)][str(month)][str(day)] = dayInfo
         f = open(self.fileName,'w')
@@ -121,7 +116,6 @@ class Loader():
         f.close()  
         
     def resetJSON(self): #completey resest the .json file, pog for testing
-        global fileName
         f = open(self.fileName,'w')
         json.dump({},f,indent = 2)
         f.close()
