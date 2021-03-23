@@ -1,5 +1,6 @@
 import json
 from task import Task
+import os
 
 class Loader():
 
@@ -125,19 +126,31 @@ class Loader():
         return Task(name=task, due_date=dueDate)
 
     # Loads every date 
+    """ #Note From Joey: Commented This Out So No Error With initFileSystem()
     def loadAllDates(self):
         with open("txt/testdata.txt", "r") as fp:
             for i in fp:
                 print(i)
         return "a"
+    """
 
     def addTask(self, task: Task):
         # put it in file plz thank
         beans = True
         pass
+    
+    def initFileSystem(self):
+        jsonFolder = self.fileName.split("/")[0]
+        if not os.path.exists(jsonFolder):
+            os.mkdir(jsonFolder)
+        if not os.path.exists(self.fileName):
+            open(self.fileName,"x")
+            self.resetJSON()
 
+""" #Note From Joey: Commented This Out So No Error With initFileSystem()
 with open("txt/testdata.txt", "r") as fp:
     cnt = 0
     for i in fp:
         # do
         ""
+"""

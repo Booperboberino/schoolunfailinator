@@ -88,25 +88,33 @@ class calendarDay:
 
     def __init__(self, dayNum, tasksDone, tasksToDo, parentgrid, row, col):
         global selectedDate
+        global squareColumn
+        global squareRow
         self.parentgrid = parentgrid
         self.row = row
         self.column = col
         self.dayNum = dayNum
-        self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10)
+        self.button = tk.Button(parentgrid, text = str(self.dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
 
         temp = ""
-        if dayNum != "/" and int(dayNum) < 10:
-            temp = "0"      
-        data = Loader.getDayInfo(selectedDate["year"],selectedDate["month"],temp + str(dayNum))
-        if data != {}:
-            if not ("completed" not in data or "remaining" not in data):
-                if data["completed"] <= 0 and data["remaining"] <= 0:
-                    self.button['text'] = str(selectedDate["day"])+"\nDone: \nTasks: "
-                else:
-                    self.button['text'] = str(selectedDate["day"])+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"])
+        if self.dayNum != "/": #Code That Makes Sure Completed And Remaining Is Properly Formated, Formerly The Location Of The '21' Glitch
+            if int(self.dayNum) < 10:
+                temp = "0"      
+            data = Loader.getDayInfo(selectedDate["year"],selectedDate["month"],temp + str(self.dayNum))
+            if data != {}:
+                if not ("completed" not in data or "remaining" not in data):
+                    if data["completed"] <= 0 and data["remaining"] <= 0:
+                        self.button['text'] = temp + str(self.dayNum)+"\nDone: \nTasks: "
+                    else:
+                        self.button['text'] = temp + str(self.dayNum)+"\nDone: "+str(data["completed"])+"\nTasks: "+str(data["remaining"])
         
+        if temp + str(dayNum) == selectedDate["day"]:
+            squareColumn = self.column
+            squareRow = self.row
+            self.button.config(bg = "black", fg = "white")
+            self.currentlyPressed = True            
         
     def onClick(self):
         global squareColumn
@@ -114,6 +122,8 @@ class calendarDay:
         global selectedDate
         global calendarDemo
 
+        if self.dayNum == "/": #fixes the empty day from changing
+            return
         #switch from light to dark when pressed. 
         if not self.currentlyPressed:
             squareColumn = self.column
@@ -227,6 +237,8 @@ def onAddEventClick():
     
     while not isValidDate(eventDate):
         eventDate = simpledialog.askstring("Input","When is the assignment due? [mm/dd/yyyy]",parent=root)
+        if eventDate == None:
+            return
 
 
     #taskHandler.addTask(eventName, eventDate)
@@ -261,7 +273,8 @@ def updateToDo(): #updates the todo list on the screen
         arr.append(listItem(i,0,todoFrame,jeff,0,dayTasks[i]))
         jeff +=1
 
-      
+#Small Code Snippet To Make Sure Everyone Will Have .json File All Set Up
+Loader.initFileSystem()     
 #------------------THE ACTUAL CODE THAT MAKES THE WINDOW EXIST----------------------
 
 

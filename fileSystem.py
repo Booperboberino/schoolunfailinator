@@ -1,4 +1,5 @@
 import json
+import os
 from task import Task
 #I haven't tested some of this stuff in a while so no guarantee it all works
 def editToDo(year,month,day,task,done = False): #either changes or adds a value to the to do list
@@ -125,6 +126,16 @@ def jsonToTask(task, year="2020",month="03",day="21"):
     dueDate = month + "/" + day + "/" + year
     return Task(name=task, due_date=dueDate)
 
+def initFileSystem():
+    global fileName
+    jsonFolder = fileName.split("/")[0]
+    if not os.path.exists(jsonFolder):
+        os.mkdir(jsonFolder)
+    if not os.path.exists(fileName):
+        open(fileName,"x")
+        resetJSON()
+
 
 fileName = "txt/files.json"
+
 
