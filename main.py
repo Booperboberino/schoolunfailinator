@@ -34,10 +34,9 @@ class listItem:
 
     #Takes parameters for the item name and the length of time in minutes, plus some other gui stuff. 
 
-    def __init__(self, itemname, timelength, parentWidget, r, c, checked = False):
+    def __init__(self, itemname, timelength_NOTUSINGTHIS, parentWidget, r, c, checked = False):
         self.itemname = itemname
-        self.itemString = itemname.capitalize() 
-
+        self.itemString = itemname.capitalize()
         self.bullet = Frame(parentWidget, padx= 20, pady = 5, bg = dark_color)
         self.bullet.grid(row = r, column = c)
 
@@ -94,7 +93,7 @@ class calendarDay:
         self.row = row
         self.column = col
         self.dayNum = dayNum
-        self.button = tk.Button(parentgrid, text = str(self.dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10)
+        self.button = tk.Button(parentgrid, text = str(dayNum)+"\nDone: "+str(tasksDone)+"\nTasks: "+str(tasksToDo), command = self.onClick,height = 5, width = 10, bg = light_color)
         self.button.grid(row = row, column = col)
         self.currentlyPressed = False
 
@@ -245,6 +244,13 @@ def onAddEventClick():
 
     eventDateArr = eventDate.split("/")
     fileSystem.editToDo(eventDateArr[2], eventDateArr[0], eventDateArr[1], eventName)
+    print("no errors")
+
+    
+
+
+    eventDateArr = eventDate.split("/")
+    fileSystem.editToDo(eventDateArr[2], eventDateArr[0], eventDateArr[1], eventName)
     calendarDemo.updateTasksLeft()
     selectedDate = currentDate
     updateToDo()
@@ -308,10 +314,10 @@ updateToDo()
 
 
 #These are the add/remove assignment buttons. Edit the "command" parameters with the appropriate function. If the function has its own parameters, use this... command = lambda: functionName(param)
-addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = onAddEventClick)
+addAssignmentButton = tk.Button(root, text = "Add Assignment", width = 25, command = onAddEventClick, bg = light_color)
 addAssignmentButton.grid(row = 2, column = 0)
 
-delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = onDelEventClick)
+delAssignmentButton = tk.Button(root, text = "Remove Assignment", width = 25, command = onDelEventClick, bg = light_color)
 delAssignmentButton.grid(row = 2, column = 1)
 
 
